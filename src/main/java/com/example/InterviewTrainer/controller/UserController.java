@@ -1,18 +1,15 @@
 package com.example.InterviewTrainer.controller;
 
 
-import com.example.InterviewTrainer.model.Task;
-import com.example.InterviewTrainer.model.User;
-import com.example.InterviewTrainer.service.TaskService;
+import com.example.InterviewTrainer.model.*;
+import com.example.InterviewTrainer.service.QuestionService;
 import com.example.InterviewTrainer.service.UserService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +28,7 @@ public class UserController {
     @Autowired
     UserService userService;
     @Autowired
-    TaskService taskService;
+    QuestionService questionService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/{userName}")
     public ResponseEntity getUserByUserName(@PathVariable("userName") String userName) {
@@ -46,21 +43,24 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth/registration", method = RequestMethod.POST)
     public String addUser(User user) {
         try {
-            if (userService.getUserByName(user.getUserName()) != null) {
-                throw new SQLException("User already exist " + user.getUserName());
+            if (userService.getUserByName(user.getFirstName()) != null) {
+                throw new SQLException("User already exist " + user.getFirstName());
             }
 
         } catch (SQLException ex) {
-            logger.warning("User already exist " + user.getUserName());
+            logger.warning("User already exist " + user.getFirstName());
         }
-//        if (!user.getPassword().equals(user.getConfirmPassword())) {
-//            throw new Exception("Password mismatch");
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            return "redirect:/auth/registration";
+        }
+        user.setRole(Role.USER);
+        user.setStatus(Status.ACTIVE);
         userService.saveAll(user);
 
-        return "redirect:/";
+        return "redirect:/auth/login";
     }
 
 
@@ -72,35 +72,34 @@ public class UserController {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, value = "/addTaskToUser/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity addTaskToUserById(@RequestBody Task task, @PathVariable("id") Long id, BindingResult bindingResult) throws Exception {
-        String jsonTask = gson.toJson(task, Task.class);
-        if (taskService.getTaskByName(task.getTaskName()) == null) {
-            taskService.saveAll(task);
+    @RequestMapping(method = RequestMethod.POST, value = "/addQuestionToUser/{id}", consumes = "application/json", produces = "application/json")
+    public String addQuestionToUserById(@RequestBody Question question, @PathVariable("id") Long id, BindingResult bindingResult) throws Exception {
+        if (questionService.getQuestionByName(question.getQuestionName()) == null) {
+            questionService.saveAll(question);
         }
-        Long taskId = taskService.getTaskByName(task.getTaskName()).getId();
+        Long questionId = questionService.getQuestionByName(question.getQuestionName()).getId();
         if (userService.getUserById(id).isEmpty()) {
             throw new SQLException("User not found");
         }
-        if (taskService.getAllUserTaskId(id).stream().filter(x -> x.equals(taskId)).findAny().isEmpty()) {
-            userService.addTaskToUser(id, taskId);
+        if (questionService.getAllUserQuestionsId(id).stream().filter(x -> x.equals(questionId)).findAny().isEmpty()) {
+            userService.addQuestionToUser(id, questionId);
         }
 
 
-        return new ResponseEntity(gson.toJson(jsonTask), HttpStatus.OK);
+        return "redirect:/";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user_tasks/{id}")
-    public String getUserTasksByUserId(@PathVariable("id") Long userId, Model model) {
-        Set<Long> taskIds = null;
+    @RequestMapping(method = RequestMethod.GET, value = "/user_questions/{id}")
+    public String getUserQuestionByUserId(@PathVariable("id") Long userId, Model model) {
+        Set<Long> questionsIds = null;
         try {
-            taskIds = taskService.getAllUserTaskId(userId);
+            questionsIds = questionService.getAllUserQuestionsId(userId);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        Set<Task> tasks = taskService.getAllUserTasksByTaskIds(taskIds);
-        model.addAttribute("user_tasks", tasks);
-        return "user_tasks";
+        Set<Question> questions = questionService.getAllUserQuestionsByQuestionIds(questionsIds);
+        model.addAttribute("user_questions", questions);
+        return "user_questions";
     }
 
 }

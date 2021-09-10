@@ -28,7 +28,8 @@
                 <h3>Sign up</h3>
             </div>
             <div class="card-body">
-                <form id="login" action="/user" method="post">
+                <form action="${pageContext.request.contextPath}/auth/registration"
+                       method="POST" class="form-horizontal">
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -61,7 +62,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="text" class="form-control" placeholder="confirm password">
+                        <input type="text" class="form-control" name="confirmPassword" placeholder="confirm password">
 
                     </div>
 

@@ -19,5 +19,5 @@ public interface UserService {
 
     Optional<User> getUserById(Long id);
 
-    void addTaskToUser(Long userId, Long taskId) throws SQLException;
+    void addQuestionToUser(Long userId, Long questionId) throws SQLException;
 }

@@ -5,7 +5,7 @@ import com.example.InterviewTrainer.configuration.DatabaseConnection;
 import com.example.InterviewTrainer.model.User;
 import com.example.InterviewTrainer.repository.UserRepository;
 import com.example.InterviewTrainer.service.UserService;
-import com.example.InterviewTrainer.taskEnums.TaskLearningStep;
+import com.example.InterviewTrainer.questionEnums.QuestionLearningStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,11 +54,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void addTaskToUser(Long userId, Long taskId) throws SQLException {
-        PreparedStatement ps = databaseConnection.getConnection().prepareStatement("INSERT INTO task_information(user_id,task_id,step_of_learning) VALUES (?,?,?)");
+    public void addQuestionToUser(Long userId, Long QuestionId) throws SQLException {
+        PreparedStatement ps = databaseConnection.getConnection().prepareStatement("INSERT INTO Question_information(user_id,Question_id,step_of_learning) VALUES (?,?,?)");
         ps.setLong(1, userId);
-        ps.setLong(2, taskId);
-        ps.setString(3, TaskLearningStep.ON_STUDY.toString());
+        ps.setLong(2, QuestionId);
+        ps.setString(3, QuestionLearningStep.ON_STUDY.toString());
         ps.executeUpdate();
     }
 
