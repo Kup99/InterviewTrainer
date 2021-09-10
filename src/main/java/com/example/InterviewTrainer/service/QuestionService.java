@@ -25,5 +25,5 @@ public interface QuestionService {
 
     Set<Question> getAllUserQuestionsByQuestionIds(Set<Long> ids);
 
-    Set<Question> getAllQuestionsByQuestionGroup(String questionGroup);
+    Set<Question> getAllQuestionsByQuestionGroup(Enum questionGroup);
 }

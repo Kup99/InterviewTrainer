@@ -56,8 +56,8 @@ public class QuestionController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllQuestionsByQuestionGroup/{questionGroup}")
-    public String getAllQuestionByQuestionGroup(@PathVariable("questionGroup") String questionGroup, Model model) {
-        model.addAttribute("questions", questionService.getAllQuestionsByQuestionGroup(questionGroup.toString()));
+    public String getAllQuestionByQuestionGroup(@PathVariable("questionGroup") QuestionGroups questionGroup, Model model) {
+        model.addAttribute("questions", questionService.getAllQuestionsByQuestionGroup(questionGroup.name()));
         return "questions";
     }
 }

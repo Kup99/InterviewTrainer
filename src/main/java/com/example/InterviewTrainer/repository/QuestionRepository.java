@@ -15,7 +15,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, JpaSp
     Question findByQuestionName(String name);
 
     @Query("SELECT t from Question t where t.questionGroup= :questionGroup")
-    Set<Question> getAllQuestionsByQuestionGroup(String questionGroup);
+    Set<Question> getAllQuestionsByQuestionGroup(Enum questionGroup);
 
 
 }
