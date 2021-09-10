@@ -3,6 +3,7 @@ package com.example.InterviewTrainer.service.impl;
 import com.example.InterviewTrainer.configuration.DatabaseConnection;
 import com.example.InterviewTrainer.model.Question;
 import com.example.InterviewTrainer.model.Question;
+import com.example.InterviewTrainer.questionEnums.QuestionGroups;
 import com.example.InterviewTrainer.repository.QuestionInformationRepository;
 import com.example.InterviewTrainer.repository.QuestionRepository;
 import com.example.InterviewTrainer.service.QuestionService;
@@ -67,7 +68,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Set<Question> getAllQuestionsByQuestionGroup(String questionGroup) {
+    public Set<Question> getAllQuestionsByQuestionGroup(QuestionGroups questionGroup) {
        return questionRepository.getAllQuestionsByQuestionGroup(questionGroup);
     }
 

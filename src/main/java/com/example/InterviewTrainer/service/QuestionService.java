@@ -2,6 +2,7 @@ package com.example.InterviewTrainer.service;
 
 
 import com.example.InterviewTrainer.model.Question;
+import com.example.InterviewTrainer.questionEnums.QuestionGroups;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -25,5 +26,5 @@ public interface QuestionService {
 
     Set<Question> getAllUserQuestionsByQuestionIds(Set<Long> ids);
 
-    Set<Question> getAllQuestionsByQuestionGroup(Enum questionGroup);
+    Set<Question> getAllQuestionsByQuestionGroup(QuestionGroups questionGroup);
 }

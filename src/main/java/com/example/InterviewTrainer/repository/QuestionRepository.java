@@ -1,6 +1,7 @@
 package com.example.InterviewTrainer.repository;
 
 import com.example.InterviewTrainer.model.Question;
+import com.example.InterviewTrainer.questionEnums.QuestionGroups;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, JpaSp
     Question findByQuestionName(String name);
 
     @Query("SELECT t from Question t where t.questionGroup= :questionGroup")
-    Set<Question> getAllQuestionsByQuestionGroup(Enum questionGroup);
+    Set<Question> getAllQuestionsByQuestionGroup(QuestionGroups questionGroup);
 
 
 }
